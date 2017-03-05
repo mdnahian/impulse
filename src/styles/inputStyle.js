@@ -6,11 +6,12 @@ export default StyleSheet.create({
 		backgroundColor: '#2F4861'
 	},
 	closeButtonContainer: {
-		flex:1,
+		flex:0.5,
 		justifyContent: 'center',
 		alignItems: 'flex-end',
 		marginLeft:24,
-		marginRight:24
+		marginRight:24,
+		marginBottom:64
 	},
 	closeButton: {
 		width:50,
@@ -30,33 +31,9 @@ export default StyleSheet.create({
 		alignItems: 'center'
 	},
 	sliderLabel: {
-		flex:1,
+		flex:2,
 		fontSize:20,
 		color: '#F5FAFF'
-	},
-	slider: {
-		flex:2,
-		marginLeft:24,
-		marginRight:24
-	},
-	sliderPoints: {
-		flexDirection: 'row'
-	},
-	sliderLine: {
-		alignSelf: 'stretch',
-		height:2,
-		marginTop:-5,
-		marginLeft:12,
-		marginRight:12,
-		backgroundColor: '#F5FAFF'
-	},
-	sliderPoint: {
-		width:8,
-		height:8,
-		borderRadius:4,
-		marginLeft:10,
-		marginRight:10,
-		backgroundColor: '#F5FAFF'
 	},
 	stepsContainer: {
 		flex:1,

@@ -9,6 +9,8 @@ import {
 import baseStyle from '../styles/baseStyle';
 import inputStyle from '../styles/inputStyle';
 
+var Slider = require('../components/react-native-slider');
+
 module.exports = React.createClass({
 	getInitialState: function () {
 		return {
@@ -26,22 +28,9 @@ module.exports = React.createClass({
 			<View style={inputStyle.sliderContainer}>
 				<Text style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
 
-				<View style={inputStyle.slider}>
-					<View style={inputStyle.sliderPoints}>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-						<View style={inputStyle.sliderPoint}></View>
-					</View>
-
-					<View style={inputStyle.sliderLine}></View>
-				</View>
+				<Slider
+					max={10}
+					value={5} />
 			</View>
 
 			<View style={inputStyle.stepsContainer}>
