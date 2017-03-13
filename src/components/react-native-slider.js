@@ -20,16 +20,31 @@ module.exports = React.createClass({
 				{Array.apply(0, Array(this.props.max)).map((x, i) =>  {
 
 					if(i == this.state.value - 1){
+
+						var label = '';
+
+						if(this.props.label != null){
+							label = ' '+this.props.label;
+						}
+
 						return <View key={i + 1} style={style.sliderPointCurrentContainer}>
-							<View style={style.sliderPointCurrentLabel}><Text style={style.sliderPointCurrentNumber}>{i + 1}</Text></View>
+							<View style={style.sliderPointCurrentLabel}><Text style={style.sliderPointCurrentNumber}>{i + 1}{label}</Text></View>
 							<View style={style.sliderPointCurrentLine}></View>
 							<View style={[style.sliderPoint, style.sliderPointCurrent]}></View> 
 						</View>
 					}
 
-					return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
-						<View style={style.sliderPoint}></View>
-					</TouchableHighlight>
+					if(this.props.bubbles){
+						return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
+							<View style={style.sliderPoint}></View>
+						</TouchableHighlight>
+					} else {
+						return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
+							<View style={style.sliderPointFalse}></View>
+						</TouchableHighlight>
+					}
+
+					
 				})}
 			</View>
 
@@ -79,8 +94,16 @@ var style = StyleSheet.create({
 		width:8,
 		height:8,
 		borderRadius:4,
-		marginLeft:10,
-		marginRight:10,
+		marginLeft: 10,
+		marginRight: 10,
+		backgroundColor: '#F5FAFF'
+	},
+	sliderPointFalse: {
+		width:8,
+		height:8,
+		marginLeft:0,
+		marginRight:0,
+		opacity:0,
 		backgroundColor: '#F5FAFF'
 	},
 	sliderPointCurrentContainer: {

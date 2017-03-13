@@ -3,7 +3,8 @@ import {
 	View,
 	Text,
 	Image,
-	TouchableHighlight
+	TouchableHighlight,
+	StatusBar
 } from 'react-native';
 
 import baseStyle from '../styles/baseStyle';
@@ -12,13 +13,21 @@ import inputStyle from '../styles/inputStyle';
 var Slider = require('../components/react-native-slider');
 
 module.exports = React.createClass({
-	getInitialState: function () {
-		return {
-			impulse: 0
-		}
-	},
 	render: function() {
+
+		this.props.somesound.play((success) => {
+			if (success) {
+			    console.log('successfully finished playing');
+			} else {
+				console.log('playback failed due to audio decoding errors');
+		  	}
+		});
+
+		this.props.somesound.setNumberOfLoops(-1);
+
+
 		return <View style={[baseStyle.container, inputStyle.container]}>
+			<StatusBar hidden />
 			<View style={inputStyle.closeButtonContainer}>
 				<TouchableHighlight style={inputStyle.closeButton} onPress={this.closeImpulseButton} underlayColor={'#EEF3F8'}>
 					<Image style={inputStyle.closeButtonImage} source={require('../../img/close.png')}/>
@@ -30,7 +39,9 @@ module.exports = React.createClass({
 
 				<Slider
 					max={10}
-					value={5} />
+					bubbles={true}
+					value={this.props.app.state.impulse}
+					onValueChanged={(value) => this.props.app.setState({impulse: value})} />
 			</View>
 
 			<View style={inputStyle.stepsContainer}>
@@ -43,6 +54,12 @@ module.exports = React.createClass({
 		</View>
 	},
 	closeImpulseButton: function () {
+		this.props.somesound.stop();
 		this.props.navigator.pop();
+	},
+	nextStep: function () {
+		this.props.navigator.push({
+			name: 'input2'
+		})
 	}
 });

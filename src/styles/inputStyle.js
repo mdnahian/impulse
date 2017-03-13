@@ -3,7 +3,8 @@ import { Platform, StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
 	container: {
-		backgroundColor: '#2F4861'
+		backgroundColor: '#2F4861',
+		marginTop: 0
 	},
 	closeButtonContainer: {
 		flex:0.5,
@@ -56,7 +57,7 @@ export default StyleSheet.create({
 		color: '#2F4861'
 	},
 	remainingSteps: {
-		flex:2,
+		flex:3,
 		fontSize:15,
 		fontWeight:'bold',
 		color: '#E9EDF2',
