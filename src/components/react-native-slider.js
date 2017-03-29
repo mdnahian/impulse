@@ -54,7 +54,7 @@ module.exports = React.createClass({
 	moveLeft: function () {
 		this.setState({
 			value: value + 1
-		})
+		});
 	},
 	moveRight: function () {
 		this.setState({
@@ -62,10 +62,10 @@ module.exports = React.createClass({
 		})
 	},
 	moveToPos: function (pos) {
-		console.log(pos);
 		this.setState({
 			value: pos
-		})
+		});
+		this.props.onValueChanged(pos);
 	}
 });
 

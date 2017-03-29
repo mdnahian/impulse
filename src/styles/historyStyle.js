@@ -30,6 +30,33 @@ export default StyleSheet.create({
 		flex:4
 	},
 	chartCircles: {
-		flex:1
+		flex:2,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding:12
+	},
+	statCircleOuter: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	statCircleInner: {
+		width:92,
+		height:92,
+		borderRadius:46,
+		backgroundColor: '#E9EDF2',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	statCircleLabel: {
+		color: '#2F4861',
+		fontSize: 8,
+		textAlign: 'center'
+	},
+	statCircleNumber: {
+		color: '#2F4861',
+		fontSize: 18,
+		textAlign: 'center'
 	}
 });

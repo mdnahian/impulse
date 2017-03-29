@@ -28,8 +28,8 @@ export default StyleSheet.create({
 		alignItems: 'center'
 	},
 	statCircleInner: {
-		width:80,
-		height:80,
+		width:84,
+		height:84,
 		borderRadius:40,
 		backgroundColor: '#E9EDF2',
 		justifyContent: 'center',

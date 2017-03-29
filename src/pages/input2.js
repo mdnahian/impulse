@@ -31,7 +31,7 @@ module.exports = React.createClass({
 					bubbles={false}
 					label={"minutes"}
 					value={this.props.app.state.duration}
-					onValueChanged={(value) => this.props.app.setState({duration: value})} />
+					onValueChanged={(value) => this.sliderValueChanged(value)} />
 
 				<Text style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
 
@@ -62,11 +62,26 @@ module.exports = React.createClass({
 		this.props.navigator.resetTo({
 			name:'home'
 		});
+		this.props.onImpulseAdded(true);
 	},
 	yesBtnPressed: function () {
 		this.props.somesound.stop();
 		this.props.navigator.resetTo({
 			name:'home'
+		});
+		this.props.onImpulseAdded(false);
+	},
+	sliderValueChanged: function (value) {
+		this.props.app.setState({duration: value});
+		this.props.somesound.pause();
+		this.props.somesound.setCurrentTime(0.5);
+		this.props.somesound.setVolume(value / 20);
+		this.props.somesound.play((success) => {
+			if (success) {
+			    console.log('successfully finished playing');
+			} else {
+				console.log('playback failed due to audio decoding errors');
+		  	}
 		});
 	}
 });

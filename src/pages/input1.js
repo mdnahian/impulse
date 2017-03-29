@@ -14,18 +14,6 @@ var Slider = require('../components/react-native-slider');
 
 module.exports = React.createClass({
 	render: function() {
-
-		this.props.somesound.play((success) => {
-			if (success) {
-			    console.log('successfully finished playing');
-			} else {
-				console.log('playback failed due to audio decoding errors');
-		  	}
-		});
-
-		this.props.somesound.setNumberOfLoops(-1);
-
-
 		return <View style={[baseStyle.container, inputStyle.container]}>
 			<StatusBar hidden />
 			<View style={inputStyle.closeButtonContainer}>
@@ -41,7 +29,7 @@ module.exports = React.createClass({
 					max={10}
 					bubbles={true}
 					value={this.props.app.state.impulse}
-					onValueChanged={(value) => this.props.app.setState({impulse: value})} />
+					onValueChanged={(value) => this.sliderValueChanged(value)} />
 			</View>
 
 			<View style={inputStyle.stepsContainer}>
@@ -61,5 +49,18 @@ module.exports = React.createClass({
 		this.props.navigator.push({
 			name: 'input2'
 		})
+	},
+	sliderValueChanged: function (value) {
+		this.props.app.setState({impulse: value});
+		this.props.somesound.pause();
+		this.props.somesound.setCurrentTime(0.5);
+		this.props.somesound.setVolume(value / 8);
+		this.props.somesound.play((success) => {
+			if (success) {
+			    console.log('successfully finished playing');
+			} else {
+				console.log('playback failed due to audio decoding errors');
+		  	}
+		});
 	}
 });
