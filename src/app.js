@@ -23,7 +23,7 @@ const DB = {
 }
 
 
-var somesound = new Sound('/Volumes/STORAGE/Javascript\ Projects/impulse/sounds/default.mp3', '', (error) => {
+var somesound = new Sound('default.mp3', '', (error) => {
 	  if (error) {
 	    console.log('failed to load the sound', error);
 	    return;
