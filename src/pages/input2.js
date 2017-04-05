@@ -22,20 +22,21 @@ module.exports = React.createClass({
 				</TouchableHighlight>
 			</View>
 
-
 			<View style={inputStyle.sliderContainer}>
-				<Text style={inputStyle.sliderLabel}>How long did it last?</Text>
+				<Text style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
 
 				<Slider
-					max={30}
-					bubbles={false}
-					label={"minutes"}
-					value={this.props.app.state.duration}
+					max={10}
+					bubbles={true}
+					value={this.props.app.state.impulse}
 					onValueChanged={(value) => this.sliderValueChanged(value)} />
-
+					
 				<Text style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
-
+			
 			</View>
+
+
+			
 
 
 			<View style={inputStyle.sliderContainer}>
@@ -72,7 +73,7 @@ module.exports = React.createClass({
 		this.props.onImpulseAdded(false);
 	},
 	sliderValueChanged: function (value) {
-		this.props.app.setState({duration: value});
+		this.props.app.setState({impulse: value});
 		this.props.somesound.pause();
 		this.props.somesound.setCurrentTime(0.5);
 		this.props.somesound.setVolume(value / 20);

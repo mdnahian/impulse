@@ -4,17 +4,41 @@ import {
 	Text,
 	StyleSheet,
 	TouchableHighlight,
-	PanResponder
+	PanResponder,
+	Animated
 } from 'react-native';
 
 
 module.exports = React.createClass({
+	componentWillMount: function () {
+		this._panResponder = PanResponder.create({
+		    onMoveShouldSetResponderCapture: () => true,
+		    onMoveShouldSetPanResponderCapture: () => true,
+
+		    onPanResponderGrant: (e, gestureState) => {
+		    	this.setState({pan: {x: 0, y: 0}});
+		    },
+
+		    onPanResponderMove: Animated.event([
+		    	null,
+		    	{
+		    		dx: this.state.pan.x,
+		    		dy: this.state.pan.y
+		    	}
+		    ]),
+
+		    onPanResponderRelease: (e, {vx, vy}) => {
+		    }
+		});
+	},
 	getInitialState: function () {
 		return {
-			value: this.props.value
+			value: this.props.value,
+			pan:  new Animated.ValueXY()
 		}
 	},
 	render: function () {
+
 		return <View style={style.slider}>
 			<View style={style.sliderPoints}>
 				{Array.apply(0, Array(this.props.max)).map((x, i) =>  {

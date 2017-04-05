@@ -27,7 +27,9 @@ export default StyleSheet.create({
 		color:'#ffffff'
 	},
 	chart: {
-		flex:4
+		flex:4,
+		justifyContent: 'center',
+		alignItems:'center'
 	},
 	chartCircles: {
 		flex:2,
@@ -58,5 +60,15 @@ export default StyleSheet.create({
 		color: '#2F4861',
 		fontSize: 18,
 		textAlign: 'center'
+	},
+	closeBtn: {
+		flex:0.5,
+		justifyContent:'center',
+		alignItems:'center',
+		backgroundColor:'#E9EDF2'
+	},
+	closeBtnImage: {
+		width:24,
+		height:24
 	}
 });

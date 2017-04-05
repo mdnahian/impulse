@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "15.4.2",
     "react-native": "0.42.0",
+    "react-native-loading-spinner-overlay": "^0.4.2",
     "react-native-pathjs-charts": "0.0.26",
     "react-native-popup-dialog": "^0.7.22",
     "react-native-sound": "^0.9.1",

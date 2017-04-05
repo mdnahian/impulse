@@ -6,6 +6,8 @@ import {
 	TouchableHighlight
 } from 'react-native';
 
+import { Navigator } from 'react-native';
+
 import baseStyle from '../styles/baseStyle';
 import homeStyle from '../styles/homeStyle';
 import PopupDialog from 'react-native-popup-dialog';
@@ -24,6 +26,9 @@ module.exports = React.createClass({
 		var impulses_resisted = 0;
 		var impulses_succumbed = 0;
 
+		var impulses_resisted_until_succumbed = 0;
+		var impulses_resisted_best_score = 0;
+
 		if(impulses != null){
 			for(var i=0; i<impulses.length; i++){
 				if(new Date(impulses[i].datetime).setHours(0,0,0,0) == new Date().setHours(0,0,0,0)){
@@ -32,11 +37,17 @@ module.exports = React.createClass({
 
 				if(!impulses[i].succumbed){
 					impulses_succumbed++;
+					impulses_resisted_until_succumbed = 0;
 				} else {
 					impulses_resisted++;
+					impulses_resisted_until_succumbed++;
 				}
 
 				// get streak & best values
+
+				if(impulses_resisted_best_score < impulses_resisted_until_succumbed){
+					impulses_resisted_best_score = impulses_resisted_until_succumbed;
+				}
 
 			}
 		}
@@ -70,8 +81,8 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={homeStyle.loggedStats}>
-				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>STREAK</Text>: 0</Text>
-				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>BEST</Text>: 0</Text>
+				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>STREAK</Text>: {impulses_resisted_until_succumbed}</Text>
+				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>BEST</Text>: {impulses_resisted_best_score}</Text>
 			</View>
 
 			<View style={homeStyle.addButtonContainer}>

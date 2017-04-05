@@ -53,7 +53,13 @@ module.exports = React.createClass({
 		return <Navigator style={{flex:1}}
 		initialRoute={{name: 'home'}}
 		renderScene={this.renderScene}
-		configScene={() => { return Navigator.SceneConfigs.FloatFromRight; }} />
+		configureScene={(route) => { 
+			if(route.name == 'history') {
+				return Navigator.SceneConfigs.FloatFromBottom
+			} else {
+				return Navigator.SceneConfigs.FloatFromRight
+			}
+		}} />
 	},
 	getImpulses: function() {
 		DB.impulses.find().then(resp => this.setState({impulses: resp}));

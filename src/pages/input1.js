@@ -23,13 +23,15 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={inputStyle.sliderContainer}>
-				<Text style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
+				<Text style={inputStyle.sliderLabel}>How long did the impulse last?</Text>
 
 				<Slider
-					max={10}
-					bubbles={true}
-					value={this.props.app.state.impulse}
+					max={30}
+					bubbles={false}
+					label={"seconds"}
+					value={this.props.app.state.duration}
 					onValueChanged={(value) => this.sliderValueChanged(value)} />
+
 			</View>
 
 			<View style={inputStyle.stepsContainer}>
@@ -51,16 +53,6 @@ module.exports = React.createClass({
 		})
 	},
 	sliderValueChanged: function (value) {
-		this.props.app.setState({impulse: value});
-		this.props.somesound.pause();
-		this.props.somesound.setCurrentTime(0.5);
-		this.props.somesound.setVolume(value / 8);
-		this.props.somesound.play((success) => {
-			if (success) {
-			    console.log('successfully finished playing');
-			} else {
-				console.log('playback failed due to audio decoding errors');
-		  	}
-		});
+		this.props.app.setState({duration: value});
 	}
 });
