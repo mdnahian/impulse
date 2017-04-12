@@ -6,16 +6,16 @@
 
 4. make sliders slideable
 
-5. make sound work on devices
+5. make sound work on devices ✓
 
-6. make images load on android
+6. fix chart to display one bar per day ✓
 
-7. fix chart to display one bar per day
+7. all labels to left and bottom of chart 
 
-8. all labels to left and bottom of chart
+8. fix frequency all time chart ✓
 
-9. fix frequency all time chart 
+9. make intensity last 30 days chart ✓
 
-10. make intensity last 30 days chart 
+10. make intensity all time chart ✓
 
-11. make intensity all time chart
+11. make history no content view

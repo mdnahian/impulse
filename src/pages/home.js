@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+	Alert,
 	View,
 	Text,
 	Image,
@@ -19,6 +20,7 @@ module.exports = React.createClass({
 		if(this.props.app.state.isLoading){
 			return <View><Text>Loading...</Text></View>;
 		}
+
 
 		var impulses = this.props.app.state.impulses;
 
@@ -111,10 +113,13 @@ module.exports = React.createClass({
 		</View>
 	},
 	fullHistory: function () {
-		this.props.navigator.push({
-			name: 'history',
-		});
-
+		if(this.props.app.state.impulses != null || this.props.app.state.impulses.length != 0){
+			this.props.navigator.push({
+				name: 'history',
+			});
+		} else {
+			Alert.alert('Not Enough Impulses Registered', 'Please check back in tomorrow to unlock this feature.')
+		}
 	},
 	addImpulse: function () {
 		this.props.navigator.push({

@@ -29,7 +29,8 @@ export default StyleSheet.create({
 	chart: {
 		flex:4,
 		justifyContent: 'center',
-		alignItems:'center'
+		alignItems:'center',
+		paddingTop:20
 	},
 	chartCircles: {
 		flex:2,

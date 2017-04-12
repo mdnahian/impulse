@@ -12,7 +12,7 @@ import Store from 'react-native-store';
 
 import Dimensions from 'Dimensions';
 
-import { Bar } from 'react-native-pathjs-charts'
+import { Bar, StockLine } from 'react-native-pathjs-charts'
 
 import baseStyle from '../styles/baseStyle';
 import historyStyle from '../styles/historyStyle';
@@ -86,7 +86,9 @@ module.exports = React.createClass({
 
 			var impulses = this.state.impulses;
 
+
 			var data = [];
+			var new_data = [];
 
 			if(impulses != null){
 
@@ -99,12 +101,38 @@ module.exports = React.createClass({
 						// check if datetime is greater than 1 month old
 						if(current_date >= new Date().setMonth(-1)){
 
+							if(this.state.currentView == 'frequency'){
+								var impulses_count = 0;
+
+								for(var j=0; j<impulses.length; j++){
+									next_date = new Date(impulses[j].datetime);
+									if(current_date.setHours(0,0,0,0) == next_date.setHours(0,0,0,0)){
+										impulses_count++;
+										impulses.splice(j, 1);
+									}
+								}
+
+
+								month_data.push({
+									"v": impulses_count + 1,
+									"name": monthNames[current_date.getMonth()] + ' ' + current_date.getUTCDate()
+								});
+							} else if(this.state.currentView == 'intensity'){
+								month_data.push({
+									"x": i,
+									"y": impulses[i].impulse
+								})
+							}
+						}
+					} else {
+
+						if(this.state.currentView == 'frequency'){
 
 							var impulses_count = 0;
 
 							for(var j=0; j<impulses.length; j++){
 								next_date = new Date(impulses[j].datetime);
-								if(current_date.setHours(0,0,0,0) == next_date.setHours(0,0,0,0)){
+								if(current_date.getMonth() == next_date.getMonth()){
 									impulses_count++;
 									impulses.splice(j, 1);
 								}
@@ -113,33 +141,59 @@ module.exports = React.createClass({
 
 							month_data.push({
 								"v": impulses_count + 1,
-								"name": monthNames[current_date.getMonth()] + ' ' + current_date.getUTCDate()
+								"name": monthNames[current_date.getMonth()]
 							});
 
-
+						} else if(this.state.currentView == 'intensity'){
+							month_data.push({
+								"x": i,
+								"y": impulses[i].impulse
+							})
 						}
-					} else {
-						var impulses_count = 0;
-
-						for(var j=0; j<impulses.length; j++){
-							next_date = new Date(impulses[j].datetime);
-							if(current_date.setHours(0,0,0,0) == next_date.setHours(0,0,0,0)){
-								impulses_count++;
-								impulses.splice(j, 1);
-							}
-						}
-
-
-						month_data.push({
-							"v": impulses_count + 1,
-							"name": monthNames[current_date.getMonth()] + ' ' + current_date.getUTCDate()
-						});
 					}
 				}
 
 				data.push(month_data);
 
+				if(this.state.currentView == 'frequency'){
+					if(data.length > 0){
+
+						var name = data[0][0].name;
+						var curr_impulses = 0;
+						
+
+						for(var i=0; i<data[0].length; i++){
+							if(data[0][i].name == name){
+								curr_impulses += data[0][i].v;
+							} else {
+
+								new_data.push({
+									"v": curr_impulses,
+									"name": name
+								});
+
+								name = data[0][i].name;
+								curr_impulses = data[0][i].v;
+								
+							}
+
+
+							if(data[0].length-1 == i){
+								new_data.push({
+									"v": curr_impulses,
+									"name": name
+								});
+							}
+
+
+						}
+
+					}
+				}
+
 			}
+
+
 
 		    let options = {
 		      width: Dimensions.get('window').width * 0.8,
@@ -159,14 +213,14 @@ module.exports = React.createClass({
 		      },
 		      axisX: {
 		        showAxis: true,
-		        showLines: true,
+		        showLines: false,
 		        showLabels: true,
 		        showTicks: true,
 		        zeroAxis: false,
 		        orient: 'bottom',
 		        label: {
 		          fontFamily: 'Arial',
-		          fontSize: 8,
+		          fontSize: 10,
 		          fontWeight: true,
 		          fill: '#34495E'
 		        }
@@ -180,65 +234,18 @@ module.exports = React.createClass({
 		        orient: 'left',
 		        label: {
 		          fontFamily: 'Arial',
-		          fontSize: 8,
+		          fontSize: 10,
 		          fontWeight: true,
 		          fill: '#34495E'
 		        }
 		      }
 		    }
 
-		    	if(this.state.currentView == 'frequency'){
-
-		    		var circleButtons = <View style={historyStyle.chartCircles}>
-						<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
-							<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
-								<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
-								<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
-							</View>
-						</TouchableHighlight>
-
-						<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
-							<View style={historyStyle.statCircleInner}>
-								<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
-								<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>ALL TIME</Text>
-							</View>
-						</TouchableHighlight>
-					</View>
-
-					if(!this.state.last30){
-						circleButtons = <View style={historyStyle.chartCircles}>
-							<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
-								<View style={historyStyle.statCircleInner}>
-									<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
-									<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
-								</View>
-							</TouchableHighlight>
-
-							<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
-								<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
-									<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
-									<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>ALL TIME</Text>
-								</View>
-							</TouchableHighlight>
-						</View>
-					}
-
-
-					currentView = <View style={historyStyle.chartContainer}>
-						<View style={historyStyle.chart}>
-							<Bar data={data} options={options} accessorKey='v'/>
-						</View>
-
-						{circleButtons}
-					</View>
-
-
-
-				} else if(this.state.currentView == 'intensity'){
-		    		currentView = <View style={historyStyle.chartContainer}>
-						
-					</View>
-		    	}
+	    	if(this.state.currentView == 'frequency'){
+	    		currentView = this.loadContent(new_data, options);
+			} else if(this.state.currentView == 'intensity'){
+	    		currentView = this.loadContent(data, options);
+	    	}
 
 	    }
 
@@ -294,5 +301,64 @@ module.exports = React.createClass({
 			impulses: resp,
 			isLoading: false
 		}));
+	},
+	loadContent: function (data, options) {
+		var circleButtons = <View style={historyStyle.chartCircles}>
+			<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
+				<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
+					<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
+					<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
+				</View>
+			</TouchableHighlight>
+
+			<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
+				<View style={historyStyle.statCircleInner}>
+					<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
+					<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>ALL TIME</Text>
+				</View>
+			</TouchableHighlight>
+		</View>
+
+		if(!this.state.last30){
+			circleButtons = <View style={historyStyle.chartCircles}>
+				<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
+					<View style={historyStyle.statCircleInner}>
+						<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
+						<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
+					</View>
+				</TouchableHighlight>
+
+				<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
+					<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
+						<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
+						<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>ALL TIME</Text>
+					</View>
+				</TouchableHighlight>
+			</View>
+		}
+
+
+		if(this.state.currentView == 'frequency'){
+			return <View style={historyStyle.chartContainer}>
+				<View style={historyStyle.chart}>
+					<Bar data={[data]} options={options} accessorKey='v'/>
+				</View>
+
+				{circleButtons}
+			</View>
+		} else if(this.state.currentView == 'intensity') {
+			return <View style={historyStyle.chartContainer}>
+				<View style={historyStyle.chart}>
+					<StockLine data={data} options={options} xKey='x' yKey='y' />
+					<Text style={{marginTop:-20}}>Impulses</Text>
+				</View>
+
+				{circleButtons}
+			</View>
+		} else {
+			return <Text>Error...</Text>
+		}
+
+		
 	}
 });
