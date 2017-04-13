@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
+import Dimensions from 'Dimensions';
 
 export default StyleSheet.create({
 	tabsContainer: {
@@ -71,5 +72,13 @@ export default StyleSheet.create({
 	closeBtnImage: {
 		width:24,
 		height:24
+	},
+	noData: {
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	placeholder: {
+		width: Dimensions.get('window').width * 0.8,
+		height: 250,
 	}
 });

@@ -113,13 +113,13 @@ module.exports = React.createClass({
 		</View>
 	},
 	fullHistory: function () {
-		if(this.props.app.state.impulses != null || this.props.app.state.impulses.length != 0){
+		// if(this.props.app.state.impulses != null && this.props.app.state.impulses.length != 0){
 			this.props.navigator.push({
 				name: 'history',
 			});
-		} else {
-			Alert.alert('Not Enough Impulses Registered', 'Please check back in tomorrow to unlock this feature.')
-		}
+		// } else {
+			// Alert.alert('Not Enough Impulses Registered', 'Please check back in tomorrow to unlock this feature.')
+		// }
 	},
 	addImpulse: function () {
 		this.props.navigator.push({

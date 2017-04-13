@@ -38,7 +38,8 @@ module.exports = React.createClass({
 		return {
 			currentView: 'frequency',
 			last30: true,
-			isLoading:true
+			isLoading:true,
+			isNoData: false
 		}
 	},
 	render: function() {
@@ -90,7 +91,9 @@ module.exports = React.createClass({
 			var data = [];
 			var new_data = [];
 
-			if(impulses != null){
+			if(impulses != null && impulses.length > 1){
+
+				console.log(impulses);
 
 				var month_data = [];
 
@@ -188,8 +191,13 @@ module.exports = React.createClass({
 
 						}
 
+					} else {
+						this.setState({
+							isNoData: true
+						});
 					}
 				}
+
 
 			}
 
@@ -241,7 +249,7 @@ module.exports = React.createClass({
 		      }
 		    }
 
-	    	if(this.state.currentView == 'frequency'){
+		    if(this.state.currentView == 'frequency'){
 	    		currentView = this.loadContent(new_data, options);
 			} else if(this.state.currentView == 'intensity'){
 	    		currentView = this.loadContent(data, options);
@@ -338,7 +346,15 @@ module.exports = React.createClass({
 		}
 
 
-		if(this.state.currentView == 'frequency'){
+		if(this.state.isNoData || data.length < 2){
+			return <View style={historyStyle.chartContainer}>
+				<View style={historyStyle.chart}>
+					<Image style={historyStyle.placeholder} source={require('../../img/placeholder.png')}/>
+				</View>
+
+				{circleButtons}
+			</View>
+		} else if(this.state.currentView == 'frequency'){
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
 					<Bar data={[data]} options={options} accessorKey='v'/>
