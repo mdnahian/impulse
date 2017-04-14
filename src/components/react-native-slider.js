@@ -5,36 +5,103 @@ import {
 	StyleSheet,
 	TouchableHighlight,
 	PanResponder,
-	Animated
+    Animated,
+    Dimensions
 } from 'react-native';
 
 
 module.exports = React.createClass({
 	componentWillMount: function () {
-		this._panResponder = PanResponder.create({
-		    onMoveShouldSetResponderCapture: () => true,
-		    onMoveShouldSetPanResponderCapture: () => true,
 
-		    onPanResponderGrant: (e, gestureState) => {
-		    	this.setState({pan: {x: 0, y: 0}});
-		    },
+		this.state.pan.x.addListener((value) => {
 
-		    onPanResponderMove: Animated.event([
-		    	null,
-		    	{
-		    		dx: this.state.pan.x,
-		    		dy: this.state.pan.y
-		    	}
-		    ]),
+			if(this.props.bubbles){
 
-		    onPanResponderRelease: (e, {vx, vy}) => {
-		    }
+				if(this.state.isPlaying == false){
+					this.props.somesound.setNumberOfLoops(-1);
+					this.props.somesound.setVolume(0.05);
+					this.props.somesound.setCurrentTime(0.5);
+					// this.props.somesound.setVolume(value / 20);
+					this.props.somesound.play((success) => {
+						if (success) {
+						    console.log('successfully finished playing');
+						} else {
+							console.log('playback failed due to audio decoding errors');
+					  	}
+					});
+
+					this.setState({
+						isPlaying: true
+					})
+				}
+
+				// if(value.value % 27 == 0){
+				// 	var val = value.value/27;
+				// 	if(val > 0 && val < 11){
+				// 		this.setState({
+				// 			val: val
+				// 		});
+				// 	}
+						
+				// }
+
+				var val = Math.round(value.value/27);
+				if(val >= 1 && val <= 10){
+					this.setState({
+						val:val
+					});
+					this.props.somesound.setVolume(val / 20);
+				}
+
+			} else {
+				var val = Math.round(value.value/4.66);
+				if(val >= 2 && val <= 45){
+					this.setState({
+						val: val
+					})
+				} 
+
+			}
+			
+
+			// console.log(value.value);
 		});
+
+		this.panResponder = PanResponder.create({    
+	        onStartShouldSetPanResponder : () => true,
+	        onPanResponderMove           : Animated.event([null,{ 
+		            dx : this.state.pan.x,
+		            dy : this.state.pan.y
+	        }]),
+			// onPanResponderMove           : (e, gesture) => {
+			// 	if(gesture.dx > 0){
+	  //       		this.moveRight();
+	  //       	} else {
+	  //       		this.moveLeft();
+	  //       	}
+			// },
+	        onPanResponderRelease        : (e, gesture) => {
+	        	this.props.onValueChanged(this.state.val);
+
+	        	if(this.props.bubbles){
+	        		this.props.somesound.pause();
+		        	this.setState({
+		        		isPlaying: false
+		        	})
+	        	}
+	        	
+	        }
+	    });
 	},
+	componentWillUnmount: function() {
+	    this.state.pan.x.removeAllListeners();
+	},  
 	getInitialState: function () {
 		return {
 			value: this.props.value,
-			pan:  new Animated.ValueXY()
+			pan:  new Animated.ValueXY(),
+			val: this.props.value,
+			isPlaying: false
 		}
 	},
 	render: function () {
@@ -51,22 +118,39 @@ module.exports = React.createClass({
 							label = ' '+this.props.label;
 						}
 
-						return <View key={i + 1} style={style.sliderPointCurrentContainer}>
-							<View style={style.sliderPointCurrentLabel}><Text style={style.sliderPointCurrentNumber}>{i + 1}{label}</Text></View>
+						// return <View key={i + 1} style={style.sliderPointCurrentContainer}>
+						// 	<View style={style.sliderPointCurrentLabel}><Text style={style.sliderPointCurrentNumber}>{i + 1}{label}</Text></View>
+						// 	<View style={style.sliderPointCurrentLine}></View>
+						// 	<View style={[style.sliderPoint, style.sliderPointCurrent]}></View> 
+						// </View>
+
+						return <Animated.View key={i + 1} {...this.panResponder.panHandlers}  style={[this.state.pan.getLayout(), style.sliderPointCurrentContainer]}>
+							<View style={style.sliderPointCurrentLabel}><Text style={style.sliderPointCurrentNumber}>{this.state.val}{label}</Text></View>
 							<View style={style.sliderPointCurrentLine}></View>
 							<View style={[style.sliderPoint, style.sliderPointCurrent]}></View> 
-						</View>
+						</Animated.View>
 					}
 
-					if(this.props.bubbles){
-						return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
-							<View style={style.sliderPoint}></View>
-						</TouchableHighlight>
-					} else {
-						return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
+					// if(this.props.bubbles){
+					// 	return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
+					// 		<View style={style.sliderPoint}></View>
+					// 	</TouchableHighlight>
+					// } else {
+					// 	return <TouchableHighlight key={i + 1} onPress={() => this.moveToPos(i + 1)} underlayColor={'transparent'}>
+					// 		<View style={style.sliderPointFalse}></View>
+					// 	</TouchableHighlight>
+					// }
+
+
+					// if(this.props.bubbles){
+					// 	return <View key={i + 1}>
+					// 		<View style={style.sliderPoint}></View>
+					// 	</View>
+					// } else {
+						return <View key={i + 1}>
 							<View style={style.sliderPointFalse}></View>
-						</TouchableHighlight>
-					}
+						</View>
+					// }
 
 					
 				})}
@@ -77,12 +161,12 @@ module.exports = React.createClass({
 	},
 	moveLeft: function () {
 		this.setState({
-			value: value + 1
+			value: this.state.value + 1
 		});
 	},
 	moveRight: function () {
 		this.setState({
-			value: value - 1
+			value: this.state.value - 1
 		})
 	},
 	moveToPos: function (pos) {
@@ -97,8 +181,7 @@ module.exports = React.createClass({
 var style = StyleSheet.create({
 	slider: {
 		flex:2,
-		marginLeft:24,
-		marginRight:24
+		width: Dimensions.get('window').width
 	},
 	sliderPoints: {
 		flexDirection: 'row'
@@ -110,8 +193,6 @@ var style = StyleSheet.create({
 		top:3,
 		left:0,
 		right:0,
-		marginLeft:12,
-		marginRight:12,
 		backgroundColor: '#F5FAFF'
 	},
 	sliderPoint: {

@@ -28,6 +28,7 @@ module.exports = React.createClass({
 				<Slider
 					max={10}
 					bubbles={true}
+					somesound={this.props.somesound}
 					value={this.props.app.state.impulse}
 					onValueChanged={(value) => this.sliderValueChanged(value)} />
 					
@@ -74,16 +75,16 @@ module.exports = React.createClass({
 	},
 	sliderValueChanged: function (value) {
 		this.props.app.setState({impulse: value});
-		this.props.somesound.pause();
-		this.props.somesound.setCurrentTime(0.5);
-		this.props.somesound.setVolume(value / 20);
-		this.props.somesound.play((success) => {
-			if (success) {
-			    console.log('successfully finished playing');
-			} else {
-				console.log('playback failed due to audio decoding errors');
-		  	}
-		});
+		// this.props.somesound.pause();
+		// this.props.somesound.setCurrentTime(0.5);
+		// this.props.somesound.setVolume(value / 20);
+		// this.props.somesound.play((success) => {
+		// 	if (success) {
+		// 	    console.log('successfully finished playing');
+		// 	} else {
+		// 		console.log('playback failed due to audio decoding errors');
+		//   	}
+		// });
 
 	}
 });

@@ -39,8 +39,8 @@ module.exports = React.createClass({
 	},
 	getInitialState: function() {
 		return {
-			impulse: 5,
-			duration: 10,
+			impulse: 1,
+			duration: 2,
 			showDialog: false,
 			isLoading: false
 		}

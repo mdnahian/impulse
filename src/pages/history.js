@@ -346,15 +346,19 @@ module.exports = React.createClass({
 		}
 
 
-		if(this.state.isNoData || data.length < 2){
-			return <View style={historyStyle.chartContainer}>
-				<View style={historyStyle.chart}>
-					<Image style={historyStyle.placeholder} source={require('../../img/placeholder.png')}/>
-				</View>
+		if(data.length < 2){
+			if(this.state.isNoData || this.state.currentView != 'intensity') {
+				return <View style={historyStyle.chartContainer}>
+					<View style={historyStyle.chart}>
+						<Image style={historyStyle.placeholder} source={require('../../img/placeholder.png')}/>
+					</View>
 
-				{circleButtons}
-			</View>
-		} else if(this.state.currentView == 'frequency'){
+					{circleButtons}
+				</View>
+			}
+		}
+
+		if(this.state.currentView == 'frequency'){
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
 					<Bar data={[data]} options={options} accessorKey='v'/>
@@ -362,7 +366,9 @@ module.exports = React.createClass({
 
 				{circleButtons}
 			</View>
-		} else if(this.state.currentView == 'intensity') {
+		}
+
+		if(this.state.currentView == 'intensity') {
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
 					<StockLine data={data} options={options} xKey='x' yKey='y' />
@@ -371,8 +377,6 @@ module.exports = React.createClass({
 
 				{circleButtons}
 			</View>
-		} else {
-			return <Text>Error...</Text>
 		}
 
 		
