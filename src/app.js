@@ -39,8 +39,8 @@ module.exports = React.createClass({
 	},
 	getInitialState: function() {
 		return {
-			impulse: 1,
-			duration: 2,
+			impulse: 5,
+			duration: 15,
 			showDialog: false,
 			isLoading: false
 		}
@@ -75,7 +75,8 @@ module.exports = React.createClass({
     			impulse: 5,
 	    		duration: 10,
 	    		isLoading: false,
-	    		showDialog: true
+	    		showDialog: true,
+	    		succumbed: succumbed
     		});
 
     		this.getImpulses();

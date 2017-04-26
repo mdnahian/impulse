@@ -10,7 +10,7 @@ import {
 import baseStyle from '../styles/baseStyle';
 import inputStyle from '../styles/inputStyle';
 
-var Slider = require('../components/react-native-slider');
+var Slider = require('../components/rn-slider');
 
 module.exports = React.createClass({
 	render: function() {
@@ -23,16 +23,15 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={inputStyle.sliderContainer}>
-				<Text style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
+				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
 
 				<Slider
+					min={1}
 					max={10}
-					bubbles={true}
-					somesound={this.props.somesound}
-					value={this.props.app.state.impulse}
-					onValueChanged={(value) => this.sliderValueChanged(value)} />
+					value={5}
+					onValueChange={(value) => this.sliderValueChanged(value)}/>
 					
-				<Text style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
+				<Text allowFontScaling={false}  style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
 			
 			</View>
 
@@ -45,10 +44,10 @@ module.exports = React.createClass({
 				
 				
 				<TouchableHighlight style={[inputStyle.nextStepButton, {marginLeft:24, marginRight:24}]} onPress={this.noBtnPressed} underlayColor={'#EEF3F8'}>
-					<Text style={inputStyle.nextStepText}>NO I DIDNT 💪</Text>
+					<Text allowFontScaling={false}  style={inputStyle.nextStepText}>NO I DIDNT 💪</Text>
 				</TouchableHighlight>
 
-				<Text style={inputStyle.remainingSteps} onPress={this.yesBtnPressed}>YES I DID</Text>
+				<Text allowFontScaling={false}  style={inputStyle.remainingSteps} onPress={this.yesBtnPressed}>YES I DID</Text>
 				
 
 			</View>
@@ -75,16 +74,16 @@ module.exports = React.createClass({
 	},
 	sliderValueChanged: function (value) {
 		this.props.app.setState({impulse: value});
-		// this.props.somesound.pause();
-		// this.props.somesound.setCurrentTime(0.5);
-		// this.props.somesound.setVolume(value / 20);
-		// this.props.somesound.play((success) => {
-		// 	if (success) {
-		// 	    console.log('successfully finished playing');
-		// 	} else {
-		// 		console.log('playback failed due to audio decoding errors');
-		//   	}
-		// });
+		this.props.somesound.pause();
+		this.props.somesound.setCurrentTime(0.5);
+		this.props.somesound.setVolume(value / 20);
+		this.props.somesound.play((success) => {
+			if (success) {
+			    console.log('successfully finished playing');
+			} else {
+				console.log('playback failed due to audio decoding errors');
+		  	}
+		});
 
 	}
 });

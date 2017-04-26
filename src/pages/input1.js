@@ -10,7 +10,7 @@ import {
 import baseStyle from '../styles/baseStyle';
 import inputStyle from '../styles/inputStyle';
 
-var Slider = require('../components/react-native-slider');
+var Slider = require('../components/rn-slider');
 
 module.exports = React.createClass({
 	render: function() {
@@ -23,25 +23,28 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={inputStyle.sliderContainer}>
-				<Text style={inputStyle.sliderLabel}>How long did the impulse last?</Text>
+				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How long did the impulse last?</Text>
 
 				<Slider
+					min={2}
 					max={30}
-					bubbles={false}
-					label={"seconds"}
-					value={this.props.app.state.duration}
-					onValueChanged={(value) => this.sliderValueChanged(value)} />
+					value={10}
+					label={'seconds'}
+					onValueChange={(value) => this.props.app.setState({duration: value})}/>
 
 			</View>
 
 			<View style={inputStyle.stepsContainer}>
 				<TouchableHighlight style={inputStyle.nextStepButton} onPress={this.nextStep} underlayColor={'#EEF3F8'}>
-					<Text style={inputStyle.nextStepText}>NEXT STEP</Text>
+					<Text allowFontScaling={false}  style={inputStyle.nextStepText}>NEXT STEP</Text>
 				</TouchableHighlight>
 
-				<Text style={inputStyle.remainingSteps}>STEP 1 OF 2</Text>
+				<Text allowFontScaling={false}  style={inputStyle.remainingSteps}>STEP 1 OF 2</Text>
 			</View>
 		</View>
+	},
+	onValueChange: function (value) {
+
 	},
 	closeImpulseButton: function () {
 		this.props.somesound.stop();

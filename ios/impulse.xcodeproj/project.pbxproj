@@ -39,6 +39,8 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		F49DAE768D93405680B78C75 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32F6E2551E2040068861BDC8 /* libRNSVG.a */; };
 		F63202221EA03107001FE4F1 /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F63202211EA03107001FE4F1 /* sound.mp3 */; };
+		F68E4F791EB12D5000407BBD /* mute.caf in Resources */ = {isa = PBXBuildFile; fileRef = F68E4F781EB12D5000407BBD /* mute.caf */; };
+		F68E4F9C1EB12F3400407BBD /* libRCTSilentSwitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F68E4F9B1EB12E5300407BBD /* libRCTSilentSwitch.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -245,6 +247,20 @@
 			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
 			remoteInfo = RNSVG;
 		};
+		F68E4F9A1EB12E5300407BBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F68E4F961EB12E5300407BBD /* RCTSilentSwitch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTSilentSwitch;
+		};
+		F68E4FA11EB12F5100407BBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F68E4F9D1EB12F5100407BBD /* RCTSilentSwitch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTSilentSwitch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -277,6 +293,9 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		87EAFD58A9D34E8496A5AFF1 /* libRNSound.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSound.a; sourceTree = "<group>"; };
 		F63202211EA03107001FE4F1 /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound.mp3; path = ../sounds/sound.mp3; sourceTree = "<group>"; };
+		F68E4F781EB12D5000407BBD /* mute.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = mute.caf; path = "../node_modules/react-native-silent-switch/mute.caf"; sourceTree = "<group>"; };
+		F68E4F961EB12E5300407BBD /* RCTSilentSwitch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSilentSwitch.xcodeproj; path = "../node_modules/react-native-silent-switch/RCTSilentSwitch.xcodeproj"; sourceTree = "<group>"; };
+		F68E4F9D1EB12F5100407BBD /* RCTSilentSwitch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSilentSwitch.xcodeproj; path = "../node_modules/react-native-silent-switch/RCTSilentSwitch.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F68E4F9C1EB12F3400407BBD /* libRCTSilentSwitch.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -460,6 +480,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F68E4F9D1EB12F5100407BBD /* RCTSilentSwitch.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -489,11 +510,13 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F68E4F781EB12D5000407BBD /* mute.caf */,
 				F63202211EA03107001FE4F1 /* sound.mp3 */,
 				13B07FAE1A68108700A75B9A /* impulse */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* impulseTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+				F68E4F951EB12E5200407BBD /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -522,6 +545,30 @@
 			isa = PBXGroup;
 			children = (
 				F639E1001E81A39A003DE187 /* libRNSVG.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F68E4F951EB12E5200407BBD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F68E4F961EB12E5300407BBD /* RCTSilentSwitch.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F68E4F971EB12E5300407BBD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F68E4F9B1EB12E5300407BBD /* libRCTSilentSwitch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F68E4F9E1EB12F5100407BBD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F68E4FA21EB12F5100407BBD /* libRCTSilentSwitch.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -668,6 +715,14 @@
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
 					ProjectRef = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
+				},
+				{
+					ProductGroup = F68E4F9E1EB12F5100407BBD /* Products */;
+					ProjectRef = F68E4F9D1EB12F5100407BBD /* RCTSilentSwitch.xcodeproj */;
+				},
+				{
+					ProductGroup = F68E4F971EB12E5300407BBD /* Products */;
+					ProjectRef = F68E4F961EB12E5300407BBD /* RCTSilentSwitch.xcodeproj */;
 				},
 				{
 					ProductGroup = 832341B11AAA6A8300B99B32 /* Products */;
@@ -894,6 +949,20 @@
 			remoteRef = F639E0FF1E81A39A003DE187 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		F68E4F9B1EB12E5300407BBD /* libRCTSilentSwitch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTSilentSwitch.a;
+			remoteRef = F68E4F9A1EB12E5300407BBD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F68E4FA21EB12F5100407BBD /* libRCTSilentSwitch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTSilentSwitch.a;
+			remoteRef = F68E4FA11EB12F5100407BBD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -908,6 +977,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F68E4F791EB12D5000407BBD /* mute.caf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F63202221EA03107001FE4F1 /* sound.mp3 in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,

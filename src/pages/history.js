@@ -68,12 +68,16 @@ module.exports = React.createClass({
 
 
     	var tabs = <View style={historyStyle.tabsContainer}>
-			<TouchableHighlight style={frequencyTabStyle} onPress={this.frequency}>
-				<Text style={frequencyTabStyleText}>FREQUENCY</Text>
+    		<TouchableHighlight style={historyStyle.saveBtnContainer} onPress={this.saveBtnPressed} underlayColor={'#dedede'}>
+				<Image style={historyStyle.saveBtn} source={require('../../img/save.png')}/>
 			</TouchableHighlight>
 
-			<TouchableHighlight style={historyTabStyle} onPress={this.intensity}>
-				<Text style={historyTabStyleText}>INTENSITY</Text>
+			<TouchableHighlight style={frequencyTabStyle} onPress={this.frequency} underlayColor={'#dedede'}>
+				<Text allowFontScaling={false}  style={frequencyTabStyleText}>FREQUENCY</Text>
+			</TouchableHighlight>
+
+			<TouchableHighlight style={historyTabStyle} onPress={this.intensity} underlayColor={'#dedede'}>
+				<Text allowFontScaling={false}  style={historyTabStyleText}>INTENSITY</Text>
 			</TouchableHighlight>
 		</View>
 
@@ -267,6 +271,10 @@ module.exports = React.createClass({
 			</TouchableHighlight>
 		</View>
 	},
+	saveBtnPressed: function () {
+		// open modal and get input
+		// 
+	},
 	closeBtnPressed: function () {
 		this.props.navigator.pop();
 	},	
@@ -314,15 +322,15 @@ module.exports = React.createClass({
 		var circleButtons = <View style={historyStyle.chartCircles}>
 			<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
 				<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
-					<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
-					<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
+					<Text allowFontScaling={false}  style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
+					<Text allowFontScaling={false}  style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
 				</View>
 			</TouchableHighlight>
 
 			<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
 				<View style={historyStyle.statCircleInner}>
-					<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
-					<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>ALL TIME</Text>
+					<Text allowFontScaling={false}  style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
+					<Text allowFontScaling={false}  style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>ALL TIME</Text>
 				</View>
 			</TouchableHighlight>
 		</View>
@@ -331,15 +339,15 @@ module.exports = React.createClass({
 			circleButtons = <View style={historyStyle.chartCircles}>
 				<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
 					<View style={historyStyle.statCircleInner}>
-						<Text style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
-						<Text style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
+						<Text allowFontScaling={false}  style={[historyStyle.statCircleNumber, {fontSize:15, color:'#CAD0DE', fontWeight:'bold'}]}>⚬</Text>
+						<Text allowFontScaling={false}  style={historyStyle.statCircleLabel} adjustsFontSizeToFit={true}>LAST 30 DAYS</Text>
 					</View>
 				</TouchableHighlight>
 
 				<TouchableHighlight style={historyStyle.statCircleOuter} onPress={this.frequencyView} underlayColor={'transparent'}>
 					<View style={[historyStyle.statCircleInner, {backgroundColor:'#2F4861'}]}>
-						<Text style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
-						<Text style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>ALL TIME</Text>
+						<Text allowFontScaling={false}  style={[historyStyle.statCircleNumber, {color:'#ffffff'}]}>✓</Text>
+						<Text allowFontScaling={false}  style={[historyStyle.statCircleLabel, {color:'#ffffff'}]} adjustsFontSizeToFit={true}>ALL TIME</Text>
 					</View>
 				</TouchableHighlight>
 			</View>
@@ -372,7 +380,7 @@ module.exports = React.createClass({
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
 					<StockLine data={data} options={options} xKey='x' yKey='y' />
-					<Text style={{marginTop:-20}}>Impulses</Text>
+					<Text allowFontScaling={false}  style={{marginTop:-20}}>Impulses</Text>
 				</View>
 
 				{circleButtons}

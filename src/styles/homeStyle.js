@@ -91,5 +91,14 @@ export default StyleSheet.create({
 	addButtonImage: {
 		width:32,
 		height:32
+	},
+	closeButton: {
+		position: 'absolute',
+		top:10,
+		right:10
+	},
+	closeButtonImage: {
+		width:24,
+		height:24
 	}
 });

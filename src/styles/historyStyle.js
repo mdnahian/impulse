@@ -80,5 +80,20 @@ export default StyleSheet.create({
 	placeholder: {
 		width: Dimensions.get('window').width * 0.8,
 		height: 250,
+	},
+	saveBtnContainer: {
+		position:'absolute',
+		zIndex:9999,
+		top:0,
+		right:0,
+		bottom:0,
+		backgroundColor:'#ffffff',
+		padding:5,
+		justifyContent:'center',
+		alignItems:'center'
+	},
+	saveBtn: {
+		width: 25,
+		height: 25
 	}
 });

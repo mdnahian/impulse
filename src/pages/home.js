@@ -13,12 +13,43 @@ import baseStyle from '../styles/baseStyle';
 import homeStyle from '../styles/homeStyle';
 import PopupDialog from 'react-native-popup-dialog';
 
+import SilentSwitch from 'react-native-silent-switch';
+import StatusBarAlert from 'react-native-statusbar-alert';
+
+
 
 module.exports = React.createClass({
+	getInitialState: function () {
+		return {
+			alerts: false
+		}
+	},
+	componentWillMount: function () {
+		try{
+			SilentSwitch.removeEventListener();
+		} catch (err){
+
+		}
+	},
+	componentDidMount: function () {
+		SilentSwitch.addEventListener(silent => {
+	    if (silent) {
+	      this.setState({
+	        alerts: [{
+	          message: 'Please turn silent switch off'
+	        }, ...this.state.alerts]
+	      })
+	    } else {
+	      this.setState({
+	        alerts: false
+	      })
+	    }
+	  })
+	},
 	render: function() {
 
 		if(this.props.app.state.isLoading){
-			return <View><Text>Loading...</Text></View>;
+			return <View><Text allowFontScaling={false} >Loading...</Text></View>;
 		}
 
 
@@ -55,36 +86,63 @@ module.exports = React.createClass({
 		}
 
 
+		var silent;
+
+		if(this.state.alerts != false){
+			silent = <StatusBarAlert
+		        visible={this.state.alerts.length > 0}
+		        backgroundColor='#FA6161'
+		        pulse="background"
+		        {...this.state.alerts[0]}/>
+		}
+
+		var inner = <View style={baseStyle.dialogText}>
+	      <Text allowFontScaling={false}  style={baseStyle.dialogTitle}>Great!</Text>
+	      <Text allowFontScaling={false}  style={baseStyle.dialogSubTitle}>JOB DONE</Text>
+	    </View>
+
+	    if(!this.props.app.state.succumbed){
+	    	inner = <View style={baseStyle.dialogText}>
+		      <Text allowFontScaling={false}  style={[baseStyle.dialogTitle, {fontSize:15}]}>Keep Trying</Text>
+		      <Text allowFontScaling={false}  style={baseStyle.dialogSubTitle}>JOB DONE</Text>
+		    </View>
+	    }
+
+
+
+
 		return <View style={baseStyle.container}>
 
+			{silent}
+
 			<TouchableHighlight style={homeStyle.fullHistoryBtn} onPress={this.fullHistory} underlayColor={'#EEF3F8'}>
-					<Text style={homeStyle.fullHistoryBtnText}>View Full History</Text>
+					<Text allowFontScaling={false}  style={homeStyle.fullHistoryBtnText}>View Full History</Text>
 			</TouchableHighlight>
 
 			<View style={homeStyle.statsContainer}>
 				<View style={homeStyle.statCircleOuter}>
 					<View style={homeStyle.statCircleInner}>
-						<Text style={homeStyle.statCircleNumber}>{impulses_resisted}</Text>
-						<Text style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>RESISTED</Text>
+						<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_resisted}</Text>
+						<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>RESISTED</Text>
 					</View>
 				</View>
 
 				<View style={homeStyle.statCircleOuter}>
 					<View style={homeStyle.statCircleInner}>
-						<Text style={homeStyle.statCircleNumber}>{impulses_succumbed}</Text>
-						<Text style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>SUCCUMBED</Text>
+						<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_succumbed}</Text>
+						<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>SUCCUMBED</Text>
 					</View>
 				</View>				
 			</View>
 
 			<View style={homeStyle.loggedToday}>
-				<Text style={homeStyle.loggedTodayNumber}>{impulses_today}</Text>
-				<Text style={homeStyle.loggedTodayLabel}>Impulses Logged Today</Text>
+				<Text allowFontScaling={false}  style={homeStyle.loggedTodayNumber}>{impulses_today}</Text>
+				<Text allowFontScaling={false}  style={homeStyle.loggedTodayLabel}>Impulses Logged Today</Text>
 			</View>
 
 			<View style={homeStyle.loggedStats}>
-				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>STREAK</Text>: {impulses_resisted_until_succumbed}</Text>
-				<Text style={homeStyle.loggedStatsText}><Text style={{fontWeight:'bold'}}>BEST</Text>: {impulses_resisted_best_score}</Text>
+				<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>STREAK</Text>: {impulses_resisted_until_succumbed}</Text>
+				<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>BEST</Text>: {impulses_resisted_best_score}</Text>
 			</View>
 
 			<View style={homeStyle.addButtonContainer}>
@@ -100,17 +158,23 @@ module.exports = React.createClass({
 				show={this.props.app.state.showDialog}
 			    ref={(popupDialog) => { this.popupDialog = popupDialog }}>
 			    <View style={baseStyle.dialogContainer}>
+			    	<TouchableHighlight style={homeStyle.closeButton} onPress={this.dismissPopup} underlayColor={'transparent'}>
+						<Image style={homeStyle.closeButtonImage} source={require('../../img/closeGray.png')}/>
+					</TouchableHighlight>
+
 			    	<View style={baseStyle.dialogEmoji}>
-			    		<Text style={baseStyle.dialogEmojiText}>👍</Text>
+			    		<Text allowFontScaling={false}  style={baseStyle.dialogEmojiText}>👍</Text>
 			    	</View>
-			    	<View style={baseStyle.dialogText}>
-				      <Text style={baseStyle.dialogTitle}>Great!</Text>
-				      <Text style={baseStyle.dialogSubTitle}>JOB DONE</Text>
-				    </View>
+			    	{inner}
 				</View>
 			</PopupDialog>
 
 		</View>
+	},
+	dismissPopup: function () {
+		this.props.app.setState({
+			showDialog: false
+		})
 	},
 	fullHistory: function () {
 		// if(this.props.app.state.impulses != null && this.props.app.state.impulses.length != 0){
@@ -122,8 +186,10 @@ module.exports = React.createClass({
 		// }
 	},
 	addImpulse: function () {
-		this.props.navigator.push({
-			name: 'input1',
-		});
+		if(this.state.alert == null || this.state.alert == false){
+			this.props.navigator.push({
+				name: 'input1',
+			});
+		}
 	}
 });

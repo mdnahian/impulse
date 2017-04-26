@@ -9,6 +9,7 @@ import {
     Dimensions
 } from 'react-native';
 
+var currLayout = 1.5;
 
 module.exports = React.createClass({
 	componentWillMount: function () {
@@ -35,15 +36,6 @@ module.exports = React.createClass({
 					})
 				}
 
-				// if(value.value % 27 == 0){
-				// 	var val = value.value/27;
-				// 	if(val > 0 && val < 11){
-				// 		this.setState({
-				// 			val: val
-				// 		});
-				// 	}
-						
-				// }
 
 				var val = Math.round(value.value/27);
 				if(val >= 1 && val <= 10){
@@ -59,12 +51,14 @@ module.exports = React.createClass({
 					this.setState({
 						val: val
 					})
-				} 
+				} else if (val > 45) {
+
+				} else if (val < 2) {
+
+				}
 
 			}
 			
-
-			// console.log(value.value);
 		});
 
 		this.panResponder = PanResponder.create({    
@@ -73,13 +67,6 @@ module.exports = React.createClass({
 		            dx : this.state.pan.x,
 		            dy : this.state.pan.y
 	        }]),
-			// onPanResponderMove           : (e, gesture) => {
-			// 	if(gesture.dx > 0){
-	  //       		this.moveRight();
-	  //       	} else {
-	  //       		this.moveLeft();
-	  //       	}
-			// },
 	        onPanResponderRelease        : (e, gesture) => {
 	        	this.props.onValueChanged(this.state.val);
 
@@ -191,8 +178,8 @@ var style = StyleSheet.create({
 		height:2,
 		position: 'absolute',
 		top:3,
-		left:0,
-		right:0,
+		left:45,
+		right:45,
 		backgroundColor: '#F5FAFF'
 	},
 	sliderPoint: {
