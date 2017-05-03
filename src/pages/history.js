@@ -3,6 +3,8 @@ import {
 	View,
 	Text,
 	Image,
+	Alert,
+	TextInput,
 	TouchableHighlight
 } from 'react-native';
 
@@ -17,15 +19,46 @@ import { Bar, StockLine } from 'react-native-pathjs-charts'
 import baseStyle from '../styles/baseStyle';
 import historyStyle from '../styles/historyStyle';
 
+import PopupDialog from 'react-native-popup-dialog';
+
+import Table from 'react-native-simple-table';
+
 
 const DB = {
-    'impulses': Store.model('impulses')
+    'impulses': Store.model('impulses'),
+    'archives': Store.model('archives')
 }
 
 
 var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
+
+
+
+
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    width: Dimensions.get('window').width * 0.75 * 0.33
+  },
+  {
+    title: 'Resisted',
+    dataIndex: 'resisted',
+    width: Dimensions.get('window').width * 0.75 * 0.33
+  },
+  {
+    title: 'Succumbed',
+    dataIndex: 'succumbed',
+    width: Dimensions.get('window').width * 0.75 * 0.34
+  },
+];
+
+
+
+
 
 
 
@@ -39,10 +72,19 @@ module.exports = React.createClass({
 			currentView: 'frequency',
 			last30: true,
 			isLoading:true,
-			isNoData: false
+			isNoData: false,
+			showDialog:false,
+			archiveName: '',
+			archives: null
 		}
 	},
 	render: function() {
+
+
+		if(this.state.isLoading){
+			return <View><Text allowFontScaling={false} >Loading...</Text></View>;
+		}
+
 
 		var currentView;
 
@@ -96,8 +138,6 @@ module.exports = React.createClass({
 			var new_data = [];
 
 			if(impulses != null && impulses.length > 1){
-
-				console.log(impulses);
 
 				var month_data = [];
 
@@ -262,6 +302,38 @@ module.exports = React.createClass({
 	    }
 
 
+	    
+	    var archives = this.props.app.state.archives;
+
+	    var datasource = [];
+
+	    if(archives != null){
+	    
+	    	for(var i=0; i<archives.length; i++){
+	    		var succumbed = 0;
+	    		var resisted = 0;
+
+	    		if(archives[i].archive != null){
+	    			for(var j=0; j<archives[i].archive.length; j++){
+		    			if(!archives[i].archive[j].succumbed){
+		    				succumbed++;
+		    			} else {
+		    				resisted++;
+		    			}
+		    		}
+	    		}
+
+	    		datasource.push({
+	    			"name": archives[i].name,
+	    			"succumbed": succumbed,
+	    			"resisted": resisted
+	    		})
+	    	}
+
+	    }
+		
+
+
 
 		return <View style={baseStyle.container}>
 			{tabs}
@@ -269,11 +341,80 @@ module.exports = React.createClass({
 			<TouchableHighlight style={historyStyle.closeBtn} underlayColor={'transparent'} onPress={this.closeBtnPressed}>
 				<Image style={historyStyle.closeBtnImage} source={require('../../img/down.png')}/>
 			</TouchableHighlight>
+
+			<PopupDialog
+				width={0.75}
+				show={this.state.showDialog}
+			    ref={(popupDialog) => { this.popupDialog = popupDialog }}>
+			    <View style={baseStyle.dialogContainer}>
+			    	<TouchableHighlight style={historyStyle.closeButton} onPress={this.dismissPopup} underlayColor={'#ffffff'}>
+						<Image style={historyStyle.closeButtonImage} source={require('../../img/closeGray.png')}/>
+					</TouchableHighlight>
+
+			    	<View style={historyStyle.popupDialog}>
+			    		<View style={historyStyle.inputGroup}>
+			    			<TextInput 
+				    			style={historyStyle.archiveInput}
+				    			onChangeText={(text) => this.setState({archiveName: text})}
+				    			placeholder={'name'}/>
+
+				    		<TouchableHighlight style={historyStyle.archiveBtn} onPress={this.archiveBtnPressed} underlayColor={'transparent'}>
+				    			<Text allowFontScaling={false} style={historyStyle.archiveText}>Archive</Text>
+				    		</TouchableHighlight>
+			    		</View>
+
+			    		<View style={historyStyle.archiveTable}>
+			    			<Table width={1} columnWidth={60} columns={columns} dataSource={datasource}/>
+			    		</View>
+			    	</View>
+				</View>
+			</PopupDialog>
 		</View>
 	},
+	archiveBtnPressed: function () {
+		if(this.state.archiveName != ""){
+			Alert.alert(
+			  'Archiving Impulse Data',
+			  'This will reset the impulse count to zero. Are you sure?',
+			  [
+			    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+			    {text: 'Yes', onPress: () => this.archiveData()},
+			  ],
+			  { cancelable: false }
+			)
+		}
+	},
+	archiveData: function () {
+		
+		DB.archives.add({
+			name: this.state.archiveName,
+			archive: this.props.app.state.impulses
+		}).then((token) => {
+			this.props.app.setState({
+				isLoading:true
+			})
+
+			DB.impulses.remove().then(() => {
+				this.props.app.getImpulses();
+				this.props.app.getArchieves();
+				this.setState({
+					showDialog:false
+				});
+				this.props.navigator.pop();
+			});
+		});
+
+	},
 	saveBtnPressed: function () {
-		// open modal and get input
-		// 
+		DB.archives.find().then(resp => this.setState({
+			archives: resp,
+			showDialog:true
+		}));
+	},
+	dismissPopup: function () {
+		this.setState({
+			showDialog: false
+		})
 	},
 	closeBtnPressed: function () {
 		this.props.navigator.pop();
@@ -313,10 +454,19 @@ module.exports = React.createClass({
 		}
 	},
 	loadData: function () {
-		DB.impulses.find().then(resp => this.setState({
-			impulses: resp,
-			isLoading: false
-		}));
+		this.setState({
+			isLoading: true
+		})
+
+		DB.impulses.find().then((resp1) => {
+
+			DB.archives.find().then(resp2 => this.setState({
+				impulses: resp1,
+				archives: resp2,
+				isLoading: false
+			}));
+
+		});
 	},
 	loadContent: function (data, options) {
 		var circleButtons = <View style={historyStyle.chartCircles}>
@@ -367,9 +517,15 @@ module.exports = React.createClass({
 		}
 
 		if(this.state.currentView == 'frequency'){
+			var d = [data];
+
+			if(last30){
+				d = d.slice(Math.max(d.length - 10, 0))
+			}
+
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
-					<Bar data={[data]} options={options} accessorKey='v'/>
+					<Bar data={d} options={options} accessorKey='v'/>
 				</View>
 
 				{circleButtons}

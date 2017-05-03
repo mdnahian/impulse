@@ -95,5 +95,44 @@ export default StyleSheet.create({
 	saveBtn: {
 		width: 25,
 		height: 25
+	},
+	popupDialog: {
+		flex:1,
+		justifyContent:'center'
+	},
+	inputGroup: {
+		flex:1,
+		flexDirection:'row',
+		backgroundColor:'#dedede',
+		padding:5,
+		paddingLeft:10,
+		paddingRight:10
+	},
+	archiveInput: {
+		flex:4
+	},
+	archiveBtn: {
+		flex: 1,
+		justifyContent:'center',
+		alignItems:'center'
+	},
+	archiveText: {
+		color: '#999999'
+	},
+	archiveTable: {
+		flex:4
+	},
+	closeButton: {
+		position: 'absolute',
+		top:-24,
+		right:-24,
+		zIndex:9999,
+		backgroundColor:'#ffffff',
+		padding:12,
+		borderRadius:100
+	},
+	closeButtonImage: {
+		width:24,
+		height:24
 	}
 });

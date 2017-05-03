@@ -52,6 +52,9 @@ module.exports = React.createClass({
 			return <View><Text allowFontScaling={false} >Loading...</Text></View>;
 		}
 
+		console.log(this.props.app.state.archives);
+
+
 
 		var impulses = this.props.app.state.impulses;
 

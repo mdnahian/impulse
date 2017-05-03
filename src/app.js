@@ -14,12 +14,14 @@ var ROUTES = {
 	home: Home,
 	history: History,
 	input1: Input1,
-	input2: Input2
+	input2: Input2,
+	archives: null
 };
 
 
 const DB = {
-    'impulses': Store.model('impulses')
+    'impulses': Store.model('impulses'),
+    'archives': Store.model('archives')
 }
 
 
@@ -36,6 +38,7 @@ var somesound = new Sound('sound.mp3', Sound.MAIN_BUNDLE, (error) => {
 module.exports = React.createClass({
 	componentDidMount: function () {
 		this.getImpulses();
+		this.getArchieves();
 	},
 	getInitialState: function() {
 		return {
@@ -62,7 +65,15 @@ module.exports = React.createClass({
 		}} />
 	},
 	getImpulses: function() {
-		DB.impulses.find().then(resp => this.setState({impulses: resp}));
+		DB.impulses.find().then(resp => this.setState({
+			impulses: resp,
+			isLoading: false
+		}));
+	},
+	getArchieves: function() {
+		DB.archives.find().then(resp => this.setState({
+			archives: resp
+		}));
 	},
 	onImpulseAdded: function(succumbed) {
 		DB.impulses.add({
