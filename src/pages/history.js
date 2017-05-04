@@ -517,15 +517,15 @@ module.exports = React.createClass({
 		}
 
 		if(this.state.currentView == 'frequency'){
-			var d = [data];
+			var d = data;
 
-			if(last30){
+			if(this.state.last30){
 				d = d.slice(Math.max(d.length - 10, 0))
 			}
 
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
-					<Bar data={d} options={options} accessorKey='v'/>
+					<Bar data={[d]} options={options} accessorKey='v'/>
 				</View>
 
 				{circleButtons}
