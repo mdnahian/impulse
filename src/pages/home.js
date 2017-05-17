@@ -17,11 +17,14 @@ import SilentSwitch from 'react-native-silent-switch';
 import StatusBarAlert from 'react-native-statusbar-alert';
 
 
+var isAlertShowing = false;
+
 
 module.exports = React.createClass({
 	getInitialState: function () {
 		return {
-			alerts: false
+			alerts: false,
+			isImpulses: true
 		}
 	},
 	componentWillMount: function () {
@@ -40,6 +43,38 @@ module.exports = React.createClass({
 	        }, ...this.state.alerts]
 	      })
 	    } else {
+
+		    var settings = this.props.app.state.settings;
+		    
+
+			if(settings != null && settings.length == 0){
+
+				if(!settings.isSet){
+					if(!isAlertShowing){
+						Alert.alert(
+						  'Settings',
+						  'What would you like to register?',
+						  [
+						    {text: 'Emotions', onPress: () => this.setSettings(false)},
+						    {text: 'Impulses', onPress: () => this.setSettings(true)},
+						  ],
+						  { cancelable: false }
+						)
+						isAlertShowing = true;
+					}
+				} else {
+					this.setState({
+						isImpulses: settings[0].isImpulses
+					})
+				}
+				
+			} else {
+				this.setState({
+					isImpulses: settings[0].isImpulses
+				})
+			}
+
+
 	      this.setState({
 	        alerts: false
 	      })
@@ -51,10 +86,6 @@ module.exports = React.createClass({
 		if(this.props.app.state.isLoading){
 			return <View><Text allowFontScaling={false} >Loading...</Text></View>;
 		}
-
-		console.log(this.props.app.state.archives);
-
-
 
 		var impulses = this.props.app.state.impulses;
 
@@ -122,31 +153,35 @@ module.exports = React.createClass({
 					<Text allowFontScaling={false}  style={homeStyle.fullHistoryBtnText}>View Full History</Text>
 			</TouchableHighlight>
 
-			<View style={homeStyle.statsContainer}>
-				<View style={homeStyle.statCircleOuter}>
-					<View style={homeStyle.statCircleInner}>
-						<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_resisted}</Text>
-						<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>RESISTED</Text>
+			{this.state.isImpulses &&
+				<View style={homeStyle.statsContainer}>
+					<View style={homeStyle.statCircleOuter}>
+						<View style={homeStyle.statCircleInner}>
+							<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_resisted}</Text>
+							<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>RESISTED</Text>
+						</View>
 					</View>
-				</View>
 
-				<View style={homeStyle.statCircleOuter}>
-					<View style={homeStyle.statCircleInner}>
-						<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_succumbed}</Text>
-						<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>SUCCUMBED</Text>
-					</View>
-				</View>				
-			</View>
+					<View style={homeStyle.statCircleOuter}>
+						<View style={homeStyle.statCircleInner}>
+							<Text allowFontScaling={false}  style={homeStyle.statCircleNumber}>{impulses_succumbed}</Text>
+							<Text allowFontScaling={false}  style={homeStyle.statCircleLabel} adjustsFontSizeToFit={true}>SUCCUMBED</Text>
+						</View>
+					</View>				
+				</View>
+			}
 
 			<View style={homeStyle.loggedToday}>
 				<Text allowFontScaling={false}  style={homeStyle.loggedTodayNumber}>{impulses_today}</Text>
-				<Text allowFontScaling={false}  style={homeStyle.loggedTodayLabel}>Impulses Logged Today</Text>
+				<Text allowFontScaling={false}  style={homeStyle.loggedTodayLabel}>{this.state.isImpulses ? 'Impulses' : 'Emotions' } Logged Today</Text>
 			</View>
 
-			<View style={homeStyle.loggedStats}>
-				<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>STREAK</Text>: {impulses_resisted_until_succumbed}</Text>
-				<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>BEST</Text>: {impulses_resisted_best_score}</Text>
-			</View>
+			{this.state.isImpulses &&
+				<View style={homeStyle.loggedStats}>
+					<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>STREAK</Text>: {impulses_resisted_until_succumbed}</Text>
+					<Text allowFontScaling={false}  style={homeStyle.loggedStatsText}><Text allowFontScaling={false}  style={{fontWeight:'bold'}}>BEST</Text>: {impulses_resisted_best_score}</Text>
+				</View>
+			}
 
 			<View style={homeStyle.addButtonContainer}>
 				<TouchableHighlight style={homeStyle.addButton} onPress={this.addImpulse} underlayColor={'#EEF3F8'}>
@@ -173,6 +208,12 @@ module.exports = React.createClass({
 			</PopupDialog>
 
 		</View>
+	},
+	setSettings: function (isImpulses) {
+		this.props.app.onSettingsAdded(isImpulses);
+		this.setState({
+			isImpulses: isImpulses
+		})
 	},
 	dismissPopup: function () {
 		this.props.app.setState({

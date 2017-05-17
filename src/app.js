@@ -21,7 +21,8 @@ var ROUTES = {
 
 const DB = {
     'impulses': Store.model('impulses'),
-    'archives': Store.model('archives')
+    'archives': Store.model('archives'),
+    'settings': Store.model('settings')
 }
 
 
@@ -37,7 +38,8 @@ var somesound = new Sound('sound.mp3', Sound.MAIN_BUNDLE, (error) => {
 
 module.exports = React.createClass({
 	componentDidMount: function () {
-		this.getImpulses();
+		this.getSettings();
+		
 		this.getArchieves();
 	},
 	getInitialState: function() {
@@ -45,7 +47,8 @@ module.exports = React.createClass({
 			impulse: 5,
 			duration: 15,
 			showDialog: false,
-			isLoading: false
+			isLoading: false,
+			settings: []
 		}
 	},
 	renderScene: function(route, navigator) {
@@ -63,6 +66,32 @@ module.exports = React.createClass({
 				return Navigator.SceneConfigs.FloatFromRight
 			}
 		}} />
+	},
+	getSettings: function() {
+		DB.settings.find().then(resp => this.setState({
+			settings: resp
+		})).then((token) => {
+			if(this.state.settings == null){
+				this.setState({
+					settings: []
+				});
+			}
+			
+			this.getImpulses();
+		})
+	},
+	onSettingsAdded: function(isImpulses) {
+		DB.settings.add({
+			isImpulses: isImpulses,
+			isSet: true
+		}).then((token) => {
+			this.setState({
+				isImpulses: isImpulses,
+				isSet: true
+			});
+
+			this.getSettings();
+		});
 	},
 	getImpulses: function() {
 		DB.impulses.find().then(resp => this.setState({

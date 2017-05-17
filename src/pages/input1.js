@@ -23,7 +23,7 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={inputStyle.sliderContainer}>
-				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How long did the impulse last?</Text>
+				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How long did the {this.props.app.state.settings[0].isImpulses ? 'impulse' : 'feeling' } last?</Text>
 
 				<Slider
 					min={2}

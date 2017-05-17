@@ -26,7 +26,8 @@ import Table from 'react-native-simple-table';
 
 const DB = {
     'impulses': Store.model('impulses'),
-    'archives': Store.model('archives')
+    'archives': Store.model('archives'),
+    'settings': Store.model('settings')
 }
 
 
@@ -394,14 +395,18 @@ module.exports = React.createClass({
 				isLoading:true
 			})
 
-			DB.impulses.remove().then(() => {
-				this.props.app.getImpulses();
-				this.props.app.getArchieves();
-				this.setState({
-					showDialog:false
+			DB.settings.remove().then(() => {
+
+				DB.impulses.remove().then(() => {
+					this.props.app.getSettings();
+					this.props.app.getArchieves();
+					this.setState({
+						showDialog:false
+					});
+					this.props.navigator.pop();
 				});
-				this.props.navigator.pop();
 			});
+
 		});
 
 	},
@@ -536,7 +541,7 @@ module.exports = React.createClass({
 			return <View style={historyStyle.chartContainer}>
 				<View style={historyStyle.chart}>
 					<StockLine data={data} options={options} xKey='x' yKey='y' />
-					<Text allowFontScaling={false}  style={{marginTop:-20}}>Impulses</Text>
+					<Text allowFontScaling={false}  style={{marginTop:-20}}>{this.props.app.state.settings[0].isImpulses ? 'Impulses' : 'Emotions' }</Text>
 				</View>
 
 				{circleButtons}

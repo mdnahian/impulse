@@ -23,34 +23,46 @@ module.exports = React.createClass({
 			</View>
 
 			<View style={inputStyle.sliderContainer}>
-				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How strong is the impulse?</Text>
+				<Text allowFontScaling={false}  style={inputStyle.sliderLabel}>How strong is the {this.props.app.state.settings[0].isImpulses ? 'impulse' : 'feeling' }?</Text>
 
 				<Slider
 					min={1}
 					max={10}
 					value={5}
 					onValueChange={(value) => this.sliderValueChanged(value)}/>
+				
+				{this.props.app.state.settings.isImpulses &&
+					<Text allowFontScaling={false}  style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
+				}
+			</View>
+
+
+			
+
+			{this.props.app.state.settings[0].isImpulses &&
+				<View style={inputStyle.sliderContainer}>
 					
-				<Text allowFontScaling={false}  style={[inputStyle.sliderLabel, {flex:1}]}>Did you succumb to it?</Text>
-			
-			</View>
+					
+					
+					<TouchableHighlight style={[inputStyle.nextStepButton, {marginLeft:24, marginRight:24}]} onPress={this.noBtnPressed} underlayColor={'#EEF3F8'}>
+						<Text allowFontScaling={false}  style={inputStyle.nextStepText}>NO I DIDNT 💪</Text>
+					</TouchableHighlight>
 
+					<Text allowFontScaling={false}  style={inputStyle.remainingSteps} onPress={this.yesBtnPressed}>YES I DID</Text>
+					
 
-			
+				</View>
+			}
 
+			{!this.props.app.state.settings[0].isImpulses &&
+				<View style={inputStyle.sliderContainer}>
+					<TouchableHighlight style={[inputStyle.nextStepButton, {marginLeft:24, marginRight:24}]} onPress={this.noBtnPressed} underlayColor={'#EEF3F8'}>
+						<Text allowFontScaling={false}  style={inputStyle.nextStepText}>DONE</Text>
+					</TouchableHighlight>
 
-			<View style={inputStyle.sliderContainer}>
-				
-				
-				
-				<TouchableHighlight style={[inputStyle.nextStepButton, {marginLeft:24, marginRight:24}]} onPress={this.noBtnPressed} underlayColor={'#EEF3F8'}>
-					<Text allowFontScaling={false}  style={inputStyle.nextStepText}>NO I DIDNT 💪</Text>
-				</TouchableHighlight>
-
-				<Text allowFontScaling={false}  style={inputStyle.remainingSteps} onPress={this.yesBtnPressed}>YES I DID</Text>
-				
-
-			</View>
+					<Text allowFontScaling={false}  style={inputStyle.remainingSteps} onPress={this.yesBtnPressed}></Text>
+				</View>
+			}
 
 		</View>
 	},
@@ -76,7 +88,8 @@ module.exports = React.createClass({
 		this.props.app.setState({impulse: value});
 		this.props.somesound.pause();
 		this.props.somesound.setCurrentTime(0.5);
-		this.props.somesound.setVolume(value / 20);
+		// this.props.somesound.setVolume(value / 20);
+		this.props.somesound.setVolume(1);
 		this.props.somesound.play((success) => {
 			if (success) {
 			    console.log('successfully finished playing');
