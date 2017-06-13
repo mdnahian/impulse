@@ -39,7 +39,6 @@ var somesound = new Sound('sound.mp3', Sound.MAIN_BUNDLE, (error) => {
 module.exports = React.createClass({
 	componentDidMount: function () {
 		this.getSettings();
-		
 		this.getArchieves();
 	},
 	getInitialState: function() {
@@ -94,10 +93,12 @@ module.exports = React.createClass({
 		});
 	},
 	getImpulses: function() {
-		DB.impulses.find().then(resp => this.setState({
-			impulses: resp,
-			isLoading: false
-		}));
+		DB.impulses.find().then((resp) => {
+			this.setState({
+				impulses: resp,
+				isLoading: false
+			});
+		});
 	},
 	getArchieves: function() {
 		DB.archives.find().then(resp => this.setState({

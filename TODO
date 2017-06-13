@@ -1,21 +1,11 @@
-1. streak: how many resisted until succumbed ✓
+1. Make slider centered
 
-2. best: how many resisted (best score) ✓
+2. Make default text for archieve table
 
-3. switch intensity and length sliders (sound only on intensity) ✓
+3. Make archieve button unwarped ✓
 
-4. make sliders slideable
+4. Make app reset completeley on archieve
 
-5. make sound work on devices ✓
+5. Fix intensity bug with 0 impulse data ✓
 
-6. fix chart to display one bar per day ✓
-
-7. all labels to left and bottom of chart 
-
-8. fix frequency all time chart ✓
-
-9. make intensity last 30 days chart ✓
-
-10. make intensity all time chart ✓
-
-11. make history no content view ✓
+6. Remove splash screen ✓

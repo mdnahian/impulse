@@ -365,7 +365,13 @@ module.exports = React.createClass({
 			    		</View>
 
 			    		<View style={historyStyle.archiveTable}>
-			    			<Table width={1} columnWidth={60} columns={columns} dataSource={datasource}/>
+			    			{(datasource.length != 0) &&
+			    				<Table width={1} columnWidth={60} columns={columns} dataSource={datasource}/>
+			    			}
+
+			    			{(datasource.length == 0) &&
+			    				<Text allowFontScaling={false} style={{padding:8}}>Nothing archived yet...</Text>
+			    			}
 			    		</View>
 			    	</View>
 				</View>

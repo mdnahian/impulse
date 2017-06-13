@@ -88,6 +88,7 @@ module.exports = React.createClass({
 		this.props.app.setState({impulse: value});
 		this.props.somesound.pause();
 		this.props.somesound.setCurrentTime(0.5);
+		this.props.somesound.setNumberOfLoops(-1);
 		// this.props.somesound.setVolume(value / 20);
 		this.props.somesound.setVolume(1);
 		this.props.somesound.play((success) => {
