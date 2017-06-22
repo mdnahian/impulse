@@ -60,10 +60,22 @@ module.exports = React.createClass({
 		if(this.props.label == null){
 			sub -= 9  ;
 		}
-		var l = Math.round((value / this.props.max) * this.state.width) - sub;
-		console.log(l);
+		var l = (value / this.props.max) * this.state.width - sub;
+
+		var thresh = 0;
+
+		if(this.props.label != null){
+			if(this.state.width/3 > l){
+				thresh = 5;
+			}
+
+			if(2*(this.state.width/3) < l){
+				thresh = -5;
+			}
+		}
+
 		this.setState({
-			left: l,
+			left: l+thresh,
 			value: value
 		});
 		this.props.onValueChange(value);
@@ -120,7 +132,7 @@ var style = StyleSheet.create({
 	sliderPointCurrentLine: {
 		height:32,
 		width:6,
-		backgroundColor: '#F5FAFF',
+		backgroundColor: '#F5FAFF'
 	},
 	sliderPointCurrentNumber: {
 		textAlign: 'center',

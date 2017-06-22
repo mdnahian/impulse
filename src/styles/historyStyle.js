@@ -112,9 +112,9 @@ export default StyleSheet.create({
 		flex:4
 	},
 	archiveBtn: {
-		flex: 1,
+		flex: 2,
 		justifyContent:'center',
-		alignItems:'center'
+		alignItems:'flex-end'
 	},
 	archiveText: {
 		color: '#999999'

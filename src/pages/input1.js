@@ -7,13 +7,30 @@ import {
 	StatusBar
 } from 'react-native';
 
+import RNRestart from 'react-native-restart';
+
 import baseStyle from '../styles/baseStyle';
 import inputStyle from '../styles/inputStyle';
 
 var Slider = require('../components/rn-slider');
 
+
+
 module.exports = React.createClass({
+	componentWillMount: function() {
+		this.props.app.getSettings();
+		this.props.app.getImpulses();
+	},
 	render: function() {
+
+		try{
+			var i = this.props.app.state.settings[0].isImpulses;
+		} catch(err) {
+			RNRestart.Restart();
+			// this.closeImpulseButton();
+			return <View><Text allowFontScaling={false} >Loading...</Text></View>; 
+		}
+
 		return <View style={[baseStyle.container, inputStyle.container]}>
 			<StatusBar hidden />
 			<View style={inputStyle.closeButtonContainer}>

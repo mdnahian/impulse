@@ -143,6 +143,12 @@ module.exports = React.createClass({
 	    }
 
 
+	    var total = 0;
+	    if(impulses != null){
+	    	total = impulses.length;
+	    }
+
+
 
 
 		return <View style={baseStyle.container}>
@@ -174,6 +180,9 @@ module.exports = React.createClass({
 			<View style={homeStyle.loggedToday}>
 				<Text allowFontScaling={false}  style={homeStyle.loggedTodayNumber}>{impulses_today}</Text>
 				<Text allowFontScaling={false}  style={homeStyle.loggedTodayLabel}>{this.state.isImpulses ? 'Impulses' : 'Emotions' } Logged Today</Text>
+				{!this.state.isImpulses &&
+					<Text allowFontScaling={false}  style={[homeStyle.loggedTodayLabel, {marginTop:16, fontSize:18}]}><Text allowFontScaling={false} style={{fontWeight:'bold'}}>{total}</Text> Total</Text>
+				}
 			</View>
 
 			{this.state.isImpulses &&
